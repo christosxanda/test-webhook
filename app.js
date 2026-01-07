@@ -23,11 +23,23 @@ app.get('/', (req, res) => {
   }
 });
 
-// Route for POST requests
+
+// POST: print headers + body, and try to verify signature if present
 app.post('/', (req, res) => {
   const timestamp = new Date().toISOString().replace('T', ' ').slice(0, 19);
   console.log(`\n\nWebhook received ${timestamp}\n`);
-  console.log(JSON.stringify(req.body, null, 2));
+
+  // Print headers (pretty)
+  console.log('--- HEADERS ---');
+  console.log(JSON.stringify(req.headers, null, 2));
+
+  // Print body (pretty)
+  console.log('--- BODY ---');
+  try {
+    console.log(JSON.stringify(req.body, null, 2));
+  } catch (err) {
+    console.log('Could not stringify body:', err);
+  }
   res.status(200).end();
 });
 
